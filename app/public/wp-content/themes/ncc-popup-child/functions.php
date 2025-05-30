@@ -1,6 +1,7 @@
 <?php
 // Disable block theme support to force use of index.php
-remove_theme_support( 'block-templates' );
+remove_theme_support('block-templates');
+
 
 add_action('wp_footer', function() {
     echo '<!-- Active theme: ' . wp_get_theme()->get('Name') . ' -->';
@@ -75,6 +76,9 @@ function ncc_add_popup_html() {
 }
 add_action('wp_footer', 'ncc_add_popup_html');
 
+add_action('wp_footer', function () {
+    echo '<!-- Template used: ' . basename(get_page_template()) . ' -->';
+});
 
 function ncc_handle_form_submission() {
     global $wpdb;
@@ -111,14 +115,40 @@ function ncc_handle_form_submission() {
     if ($result) {
         wp_send_json([
             'success' => true,
-            'message' => 'Success! Info has been submitted.'
+            'message' => '✅ Info has been submitted.'
         ]);
     } else {
         wp_send_json([
             'success' => false,
-            'message' => 'Something went wrong. Please try again.'
+            'message' => '🚨 Something went wrong, let\'s try that again.'
         ]);
     }
 
     wp_die();
 }
+
+add_action('wp_ajax_nopriv_ncc_check_submissions', 'ncc_check_submissions');
+add_action('wp_ajax_ncc_check_submissions', 'ncc_check_submissions');
+
+function ncc_check_submissions() {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+
+    global $wpdb;
+
+    echo "<strong>Connected to DB:</strong><br>";
+
+    $table = $wpdb->prefix . 'ncc_contacts';
+    $results = $wpdb->get_results("SELECT * FROM $table ORDER BY id DESC LIMIT 5");
+
+    if (empty($results)) {
+        echo "No results found.";
+    } else {
+        echo "<pre>";
+        print_r($results);
+        echo "</pre>";
+    }
+
+    wp_die(); // Always include this in custom AJAX functions
+}
+

@@ -7,4 +7,64 @@ Version: 1.0
 body {
   /* You can add custom styles here */
   font: 1em sans-serif;
+  padding: 0 8px;
+}
+
+.sub-header {
+  color: grey;
+}
+
+.open-modal-btn-wrap {
+  padding: 24px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.open-modal-btn {
+  border: 1px solid black;
+  background-image: linear-gradient(to right, #5ced8d, #41cc70);
+  padding: 18px 26px;
+  font-size: 1.05em;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: ease;
+}
+
+.open-modal-btn:hover {
+  background-image: linear-gradient(to right, #41cc70, #38ba64);
+  cursor: pointer;
+}
+
+.form-row {
+  padding: 8px 0;
+}
+
+.form-instruction {
+  font-size: 1.15em;
+  font-weight: 700;
+  padding: 0 0 12px;
+}
+
+#ncc-contact-form button {
+  background-image: linear-gradient(to right, #5ced8d, #41cc70);
+  border-radius: 18px;
+  padding: 6px 12px;
+  width: 25%;
+  margin: 12px 0 0;
+  font-weight: 700;
+}
+
+#ncc-contact-form button:hover {
+  cursor: pointer;
+}
+
+.ncc-close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  background: transparent;
+  border: none;
+  color: #333;
+  cursor: pointer;
 }
