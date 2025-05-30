@@ -1,7 +1,10 @@
 <div id="ncc-popup-overlay"></div>
 <div id="ncc-popup-form">
   <button id="ncc-close-popup">×</button>
-  <h2>Send Me More Information</h2>
+  <button id="ncc-popup-trigger" class="ncc-button">
+    Send Me More Information
+  </button>
+
   <form id="ncc-contact-form">
     <input type="text" name="first_name" placeholder="First Name" required />
     <input type="text" name="last_name" placeholder="Last Name" required />

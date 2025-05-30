@@ -1,4 +1,11 @@
 <?php
+// Disable block theme support to force use of index.php
+remove_theme_support( 'block-templates' );
+
+add_action('wp_footer', function() {
+    echo '<!-- Active theme: ' . wp_get_theme()->get('Name') . ' -->';
+});
+
 function ncc_child_enqueue_styles() {
     $parent_style = 'parent-style';
     wp_enqueue_style($parent_style, get_template_directory_uri() . '/style.css');
@@ -9,6 +16,17 @@ function ncc_child_enqueue_styles() {
     );
 }
 add_action('wp_enqueue_scripts', 'ncc_child_enqueue_styles');
+
+function ncc_enqueue_assets() {
+    wp_enqueue_script('ncc-popup-js', get_stylesheet_directory_uri() . '/ncc-script.js', [], null, true);
+    
+    wp_localize_script('ncc-popup-js', 'nccPopup', [
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('ncc_nonce')
+    ]);
+}
+add_action('wp_enqueue_scripts', 'ncc_enqueue_assets');
+
 
 function ncc_enqueue_popup_assets() {
     // Enqueue CSS
@@ -37,6 +55,26 @@ add_action('wp_enqueue_scripts', 'ncc_enqueue_popup_assets');
 
 add_action('wp_ajax_ncc_submit_form', 'ncc_handle_form_submission');
 add_action('wp_ajax_nopriv_ncc_submit_form', 'ncc_handle_form_submission');
+
+function ncc_add_popup_html() {
+    ?>
+    <!-- Your popup markup -->
+    <div id="ncc-popup-overlay" class="ncc-hidden">
+      <div id="ncc-popup-form-wrapper">
+        <form id="ncc-popup-form">
+          <h2>Send Me More Information</h2>
+          <label>First Name: <input type="text" name="first_name" required></label>
+          <label>Last Name: <input type="text" name="last_name" required></label>
+          <label>Email: <input type="email" name="email_address" required></label>
+          <button type="submit">Submit</button>
+        </form>
+        <div id="ncc-popup-message" class="ncc-hidden"></div>
+      </div>
+    </div>
+    <?php
+}
+add_action('wp_footer', 'ncc_add_popup_html');
+
 
 function ncc_handle_form_submission() {
     global $wpdb;
